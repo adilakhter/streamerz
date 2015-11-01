@@ -1,25 +1,61 @@
-# Streamerz
-
-A playground of video processing examples in Akka streams and Scala.
-
-It's always been said that the best way to learn a topic through meme engineering.
-This set of libraries enables all the fun you never wanted to have.
+# Drone Project
 
 
+## How to start drone feed 
 
-## Examples
+### Prerequisites:
 
-1.  Rendering your webcam to the terminal in Ascii art
 
-    $ sbt "examples/runMain examples.AsciiWebcam"
+```
+brew install kafka 
+brew install zookeper 
+```
 
-2.  Render video (and audio) to the terminal in Ascii Art
 
-    $ sbt "examples/runMain examples.AsciiVideo"
+### Steps to run: 
 
-3. Create a swing video player that can play/pause an mp4
+1.  Start zookeeper:
 
-    $ sbt "examples/runMain examples.VideoPlayer"
+    ```
+    $ zkServer start
+    ```
+
+2. Run Kafka broker:
+
+   ```
+   $ kafka-server-start.sh /usr/local/etc/kafka/server.properties
+   ```
+
+   To monitor traffic, run Kafka console consumer as follows (in a different shell): 
+   
+   ```
+   $ kafka-console-consumer.sh —-topic DRONE_FEED —-zookeeper localhost:2181
+   ```
+   
+3. To use the webcam as a source: 
+   - Run:
+  
+     ```
+     $ sbt "examples/runMain org.jtech.drone.feed.AsciiImageProducer"
+     ```
+    
+   To use the drone as a source:
+    
+   - Turn on the drone
+   - After its initial checks, connect to its WiFi hotspot
+   - Run:
+   
+     ```
+     $ sbt "examples/runMain org.jtech.drone.feed.AsciiImageProducer drone"
+     ```
+     
+4. Launch the web server:
+
+   ```
+   $ sbt "examples/runMain org.jtech.drone.ws.Main"
+   ```
+
+You can now check your webcam/drone feed as an Ascii-art animation on `http://localhost:5000`
 
 
 ## License
